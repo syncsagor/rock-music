@@ -8,7 +8,7 @@ const handleClick = async function () {
 
   const songDataArr = data.data;
 
-  const firstTenElements = songDataArr.slice(0, 7);
+  const firstTenElements = songDataArr.slice(0, 5);
 
   const songTitle = document.getElementById("song-name");
   const authorName = document.getElementById("author");
@@ -41,9 +41,24 @@ const handleClick = async function () {
         </div>
     `;
 
+    const button = ChildDiv.querySelector("button");
+    button.addEventListener("click", () => handleGetLyrics(title, author));
+
     // Append the created ChildDiv to the parentDiv
     parentDiv.appendChild(ChildDiv);
   });
 };
 
+const handleGetLyrics = async function (title, author) {
+  const res = await fetch(`https://api.lyrics.ovh/v1/${author}/${title}`);
+
+  const data = await res.json();
+
+  const { lyrics } = data;
+
+  const lyricsEl = document.getElementById("lyrics");
+  lyricsEl.innerText = lyrics;
+
+  console.log(lyrics);
+};
 document.getElementById("search-btn").addEventListener("click", handleClick);
